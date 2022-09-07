@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -59,10 +56,10 @@ public class TechJobs {
 
                 // What is their search term?
                 System.out.println("\nSearch term:");
-                String searchTerm = in.nextLine();
+                String searchTerm = in.nextLine().toUpperCase();
 
                 if (searchField.equals("all")) {
-                    printJobs(JobData.findByValue(searchTerm));
+                    printJobs(TechJobs.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -120,6 +117,38 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        System.out.println("printJobs is not implemented yet");
+        if (someJobs.size() > 0) {
+
+            for (HashMap<String, String> field : someJobs) {
+                System.out.println("*****");
+                for (Map.Entry<String, String> data : field.entrySet()) {
+
+                    System.out.println(data.getKey() + ": " + data.getValue());
+                }
+                System.out.println("*****\n");
+            }
+        } else System.out.println("No Results");
+    }
+
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+
+        // load data, if not already loaded
+//        loadData();
+        ArrayList<HashMap<String, String>> allJobs = JobData.findAll();
+        ArrayList<HashMap<String, String>> matchingItems = new ArrayList<>();
+
+        for (HashMap<String,String> row: allJobs){
+
+            for(Map.Entry<String, String> column: row.entrySet()){
+                if (column.getValue().toUpperCase().contains(value)){
+                    if(Arrays.asList(matchingItems).contains(row)){
+                        continue;
+                    }
+                    matchingItems.add(row);
+                }
+            }
+        }
+        // TODO - implement this method
+        return null;
     }
 }
