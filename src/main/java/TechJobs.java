@@ -7,7 +7,7 @@ public class TechJobs {
 
     static Scanner in = new Scanner(System.in);
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
 
         // Initialize our field map with key/name pairs
         HashMap<String, String> columnChoices = new HashMap<>();
@@ -56,10 +56,10 @@ public class TechJobs {
 
                 // What is their search term?
                 System.out.println("\nSearch term:");
-                String searchTerm = in.nextLine().toUpperCase();
+                String searchTerm = in.nextLine();
 
                 if (searchField.equals("all")) {
-                    printJobs(TechJobs.findByValue(searchTerm));
+                    printJobs(JobData.findByValue(searchTerm));
                 } else {
                     printJobs(JobData.findByColumnAndValue(searchField, searchTerm));
                 }
@@ -74,7 +74,7 @@ public class TechJobs {
         Boolean validChoice = false;
         String[] choiceKeys = new String[choices.size()];
 
-        // Put the choices in an ordered structure so we can
+        // Put the choices in an ordered structure, so we can
         // associate an integer with each one
         int i = 0;
         for (String choiceKey : choices.keySet()) {
@@ -109,7 +109,7 @@ public class TechJobs {
                 validChoice = true;
             }
 
-        } while(!validChoice);
+        } while (!validChoice);
 
         return choiceKeys[choiceIdx];
     }
@@ -117,38 +117,20 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
 
-        if (someJobs.size() > 0) {
-
-            for (HashMap<String, String> field : someJobs) {
+        if (someJobs.size() <= 0) {
+            System.out.println("No Results");
+        } else {
+            for (int i = 0; i < someJobs.size(); i++) {
+                System.out.println("\n*****");
+                for (Map.Entry<String, String> data : someJobs.get(i).entrySet()) {
+                    String key = data.getKey();
+                    Object value = data.getValue();
+                    System.out.println(key + ": " + value);
+                }
                 System.out.println("*****");
-                for (Map.Entry<String, String> data : field.entrySet()) {
-
-                    System.out.println(data.getKey() + ": " + data.getValue());
-                }
-                System.out.println("*****\n");
-            }
-        } else System.out.println("No Results");
-    }
-
-    public static ArrayList<HashMap<String, String>> findByValue(String value) {
-
-        // load data, if not already loaded
-//        loadData();
-        ArrayList<HashMap<String, String>> allJobs = JobData.findAll();
-        ArrayList<HashMap<String, String>> matchingItems = new ArrayList<>();
-
-        for (HashMap<String,String> row: allJobs){
-
-            for(Map.Entry<String, String> column: row.entrySet()){
-                if (column.getValue().toUpperCase().contains(value)){
-                    if(Arrays.asList(matchingItems).contains(row)){
-                        continue;
-                    }
-                    matchingItems.add(row);
-                }
             }
         }
-        // TODO - implement this method
-        return null;
     }
 }
+
+
